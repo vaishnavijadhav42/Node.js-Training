@@ -1,15 +1,7 @@
-import express from 'express';
-import './config.js'; // Import your MongoDB connection setup
-import Product from './product.js'; // Import your Product model
-import  ApiResponse from './response.js'; // Import the ApiResponse class
- 
+import Product from '../models/product.js';
+import ApiResponse from '../utils/response.js';
 
-const app = express();
-app.use(express.json());
-
-
-// POST: Create a new product
-app.post('/', async (req, res) => {
+export const createProduct = async (req, res) => {
     try {
         const product = new Product(req.body);
         const savedProduct = await product.save();
@@ -17,21 +9,18 @@ app.post('/', async (req, res) => {
     } catch (error) {
         res.status(400).json(new ApiResponse(false, null, error.message));
     }
-});
+};
 
-// GET: Fetch all products
-app.get('/', async (req, res) => {
+export const fetchAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
-    
         res.json(new ApiResponse(true, products));
     } catch (error) {
         res.status(500).json(new ApiResponse(false, null, 'Failed to fetch products'));
     }
-});
+};
 
-// GET: Fetch a single product by ID
-app.get('/:id', async (req, res) => {
+export const fetchProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
         if (!product) {
@@ -41,12 +30,11 @@ app.get('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json(new ApiResponse(false, null, 'Failed to fetch product'));
     }
-});
+};
 
-// PUT: Update a product by ID
-app.put('/update/:id', async (req, res) => {
+export const updateProduct = async (req, res) => {
     try {
-        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body);
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedProduct) {
             return res.status(404).json(new ApiResponse(false, null, 'Product not found or no changes made'));
         }
@@ -54,10 +42,9 @@ app.put('/update/:id', async (req, res) => {
     } catch (error) {
         res.status(400).json(new ApiResponse(false, null, error.message));
     }
-});
+};
 
-// DELETE: Delete a product by ID
-app.delete('/delete/:id', async (req, res) => {
+export const deleteProduct = async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
         if (!deletedProduct) {
@@ -67,10 +54,9 @@ app.delete('/delete/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json(new ApiResponse(false, null, 'Failed to delete product'));
     }
-});
+};
 
-// GET: Search products by name or brand (case-insensitive)
-app.get('/search/:key', async (req, res) => {
+export const searchProducts = async (req, res) => {
     try {
         const key = req.params.key;
         const response = await Product.find({
@@ -83,13 +69,4 @@ app.get('/search/:key', async (req, res) => {
     } catch (error) {
         res.status(500).json(new ApiResponse(false, null, 'Failed to search products'));
     }
-});
-
-// Handle all other routes (404 Not Found)
-app.all('*', (req, res) => {
-    res.status(404).json(new ApiResponse(false, null, `Cannot find ${req.originalUrl}`));
-});
-
-// Start the server
-
-app.listen(5000);
+};

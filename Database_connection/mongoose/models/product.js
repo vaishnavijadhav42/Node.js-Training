@@ -15,4 +15,4 @@ const ProductSchema = new mongoose.Schema({
     }
 }, { versionKey: false }); // Disable the __v field
 
-export default mongoose.model('Product', ProductSchema);
+export default mongoose.model('Products', ProductSchema);
