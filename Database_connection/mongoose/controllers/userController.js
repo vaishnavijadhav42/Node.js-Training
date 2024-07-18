@@ -23,6 +23,10 @@ export const registerUser = async (req, res) => {
         const savedUser = await newUser.save();
         res.status(201).json(new ApiResponse(true, savedUser));
     } catch (error) {
+        if (error.name === 'ValidationError') {
+            
+            return res.status(400).json(new ApiResponse(false, null, error.message));
+        }
         res.status(500).json(new ApiResponse(false, null, 'Failed to register user', error.message));
     }
 };
@@ -45,7 +49,9 @@ export const loginUser = async (req, res) => {
 
         res.status(200).json(new ApiResponse(true, { token, message: 'Login successful' }));
     } catch (error) {
-        console.error('Error logging in user:', error);
+        
         res.status(500).json(new ApiResponse(false, null, 'Failed to login user'));
     }
 };
+
+

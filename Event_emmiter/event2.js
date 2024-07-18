@@ -15,8 +15,7 @@ function addTask(title) {
   // Function to mark a task as completed
   function completeTask(taskId) {
     const task = tasks.find(task => task.id === taskId);
-
-  
+     
     if (task) {
       task.completed = true;
      // Emit the taskCompleted event

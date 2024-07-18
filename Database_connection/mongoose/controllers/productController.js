@@ -65,6 +65,10 @@ export const searchProducts = async (req, res) => {
                 { brand: { $regex: key, $options: 'i' } }
             ]
         });
+        if(response.length===0)
+        {
+            res.json(new ApiResponse(true, "No record found..")); 
+        }
         res.json(new ApiResponse(true, response));
     } catch (error) {
         res.status(500).json(new ApiResponse(false, null, 'Failed to search products'));

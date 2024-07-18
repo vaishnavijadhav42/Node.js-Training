@@ -10,10 +10,12 @@ export const authenticateJWT = (req, res, next) => {
         return res.status(401).json(new ApiResponse(false, null, 'Access denied. No token provided.'));
     }
 
-    const token = authHeader.replace('Bearer ', '');
-
+     
+    const token = authHeader.split(" ")[1];//Bearer <token>
     try {
         const verified = jwt.verify(token, JWT_SECRET);
+        console.log(verified);
+        
         req.user = verified;
         next();
     } catch (error) {

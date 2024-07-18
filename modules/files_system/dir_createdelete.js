@@ -54,7 +54,8 @@ console.log("after mkdir()");
 })
  */
 const data=fs.readdirSync(__dirname);
-console.log(data)  
+console.log(data) 
+ 
 fs.readdir(__dirname,function(err,data){
     if(err)
         {

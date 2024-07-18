@@ -14,6 +14,7 @@ con.connect((err) => {
     console.log('Connection established');
 });
 
+
 export default con;
 
 
